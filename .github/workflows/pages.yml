@@ -22,24 +22,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Rebuild site files
+      - name: Build standalone site
         run: |
-          python3 <<'PY'
-          import base64
+          python3 - <<'PY'
           from pathlib import Path
-          idx = ''.join(p.read_text() for p in sorted(Path('.').glob('index.html.p*')))
-          Path('index.html').write_text(idx)
-          print('index.html', len(idx))
-          def join_img(name):
-              parts = sorted(Path('.').glob(name + '.b64.p*'))
-              raw = ''.join(p.read_text() for p in parts)
-              Path(name).write_bytes(base64.b64decode(raw))
-              print(name, Path(name).stat().st_size, 'from', len(parts), 'parts')
-          join_img('coach-cover.jpg')
-          join_img('coach.jpg')
+          parts = sorted(Path('.').glob('index.html.p*'))
+          if parts:
+              Path('index.html').write_text(''.join(p.read_text() for p in parts))
           PY
           mkdir -p _site
-          cp index.html followers.json coach-cover.jpg coach.jpg _site/
+          curl -fsSL -o _site/coach.jpg https://raw.githubusercontent.com/5614480003-ui/muscularpongpochai/main/coach-photo.jpg
+          cp _site/coach.jpg _site/coach-cover.jpg
+          cp index.html followers.json _site/
           touch _site/.nojekyll
       - uses: actions/configure-pages@v5
         with:
