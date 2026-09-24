@@ -22,21 +22,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Build site
+      - name: Build GitHub-only site
         run: |
+          mkdir -p _site
+          curl -fsSL -o src.html https://raw.githubusercontent.com/5614480003-ui/muscularpongpochai/main/musclularcc.html
           python3 - <<'PY'
           from pathlib import Path
-          parts = sorted(Path('.').glob('index.html.p*'))
-          if parts:
-              Path('index.html').write_text(''.join(p.read_text() for p in parts))
+          html = Path('src.html').read_text(errors='ignore')
+          html = html.replace('160K+', '600K+')
+          html = html.replace('160K', '600K+')
+          # drop Netlify HUD / comments
+          lines = [ln for ln in html.splitlines() if 'netlify' not in ln.lower()]
+          html = '\n'.join(lines)
+          html = html.replace(
+              '<title>MUSCULARCC | Patcharapong Pongpochai — Muscle Building Coach</title>',
+              '<title>MUSCULARCC | Patcharapong Pongpochai — Muscle Building Coach</title>\n<link rel="canonical" href="https://5614480003-ui.github.io/coach-Patcharapong/" />'
+          )
+          Path('_site/index.html').write_text(html)
           PY
-          mkdir -p _site
-          PHOTO_SRC="https://raw.githubusercontent.com/5614480003-ui/muscularpongpochai/main/coach-photo.jpg"
-          curl -fsSL -o _site/coach-photo.jpg "$PHOTO_SRC"
+          curl -fsSL -o _site/coach-photo.jpg https://raw.githubusercontent.com/5614480003-ui/muscularpongpochai/main/coach-photo.jpg
           cp _site/coach-photo.jpg _site/coach.jpg
           cp _site/coach-photo.jpg _site/coach-cover.jpg
-          cp index.html _site/
-          [ -f followers.json ] && cp followers.json _site/ || true
+          [ -f followers.json ] && cp followers.json _site/
           touch _site/.nojekyll
       - uses: actions/configure-pages@v5
         with:
