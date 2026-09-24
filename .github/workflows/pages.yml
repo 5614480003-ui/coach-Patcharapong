@@ -22,11 +22,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Rebuild photos and publish folder
+        run: |
+          python3 <<'PY'
+          import base64
+          from pathlib import Path
+          def join(name):
+              parts = sorted(Path('.').glob(name + '.b64.p*'))
+              raw = ''.join(p.read_text() for p in parts)
+              Path(name).write_bytes(base64.b64decode(raw))
+              print(name, Path(name).stat().st_size, 'from', len(parts), 'parts')
+          join('coach-cover.jpg')
+          join('coach.jpg')
+          PY
+          mkdir -p _site
+          cp index.html followers.json coach-cover.jpg coach.jpg _site/
+          touch _site/.nojekyll
       - uses: actions/configure-pages@v5
         with:
           enablement: true
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: _site
       - id: deployment
         uses: actions/deploy-pages@v4

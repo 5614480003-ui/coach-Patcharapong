@@ -1,10 +1,10 @@
 # coach-Patcharapong
 
-Landing page for **MUSCULARCC — Patcharapong Pongpochai**, Muscle Building Coach.
+Two independent landing pages for **MUSCULARCC — Patcharapong Pongpochai**.
 
-## Live
+## Live sites
 
 - GitHub Pages: https://5614480003-ui.github.io/coach-Patcharapong/
-- Current production: https://coach-patcharapong.netlify.app
+- Netlify: https://coach-patcharapong.netlify.app
 
-If the Pages link 404s the first time, open the repo **Settings → Pages**, set Source to **GitHub Actions**, then refresh after the workflow finishes.
+The GitHub site is standalone. It does not redirect to Netlify.
