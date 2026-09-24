@@ -1,10 +1,7 @@
 # coach-Patcharapong
 
-Two independent landing pages for **MUSCULARCC — Patcharapong Pongpochai**.
+Landing page ของโค้ช Patcharapong Pongpochai (MUSCULARCC)
 
-## Live sites
+GitHub Pages: https://5614480003-ui.github.io/coach-Patcharapong/
 
-- GitHub Pages: https://5614480003-ui.github.io/coach-Patcharapong/
-- Netlify: https://coach-patcharapong.netlify.app
-
-The GitHub site is standalone. It does not redirect to Netlify.
+เว็บทีสอง: https://5614480003-ui.github.io/muscularpongpochai/

@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Build standalone site
+      - name: Build site
         run: |
           python3 - <<'PY'
           from pathlib import Path
@@ -31,9 +31,12 @@ jobs:
               Path('index.html').write_text(''.join(p.read_text() for p in parts))
           PY
           mkdir -p _site
-          curl -fsSL -o _site/coach.jpg https://raw.githubusercontent.com/5614480003-ui/muscularpongpochai/main/coach-photo.jpg
-          cp _site/coach.jpg _site/coach-cover.jpg
-          cp index.html followers.json _site/
+          PHOTO_SRC="https://raw.githubusercontent.com/5614480003-ui/muscularpongpochai/main/coach-photo.jpg"
+          curl -fsSL -o _site/coach-photo.jpg "$PHOTO_SRC"
+          cp _site/coach-photo.jpg _site/coach.jpg
+          cp _site/coach-photo.jpg _site/coach-cover.jpg
+          cp index.html _site/
+          [ -f followers.json ] && cp followers.json _site/ || true
           touch _site/.nojekyll
       - uses: actions/configure-pages@v5
         with:
